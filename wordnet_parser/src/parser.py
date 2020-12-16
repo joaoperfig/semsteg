@@ -174,10 +174,12 @@ if __name__ == "__main__":
     
     print("saving results")
     f = open("parsed.txt", "w", encoding='utf-8')
-    for word in res:
+    words = list(res)
+    words = sorted(words) # sort end result
+    for word in words:
         f.write(word + ",")
         for rep in res[word]:
-            # avoit writing the word twice per line
+            # avoid writing the word twice per line
             if rep != word:
                 f.write(rep + ",")
         f.write("\n")
