@@ -8,5 +8,7 @@ public interface Replacer {
 	
 	public List<List<TextPart>> sectionReplacements (List<TextPart> section);
 	
-
+	public List<TextPart> setSectionReplace (List<TextPart> section);
+	
+	public List<TextPart> getNext();
 }

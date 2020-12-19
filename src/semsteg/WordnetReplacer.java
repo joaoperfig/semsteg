@@ -11,6 +11,13 @@ public class WordnetReplacer implements Replacer {
 	
 	private Map<String, ArrayList<String>> replacements;
 	
+	private List<Integer> current;
+	private List<List<TextPart>> wordReplacements;
+	private int currentcount;
+	private int totalReplacements;
+	private int sectionSize;
+	List<Integer> numReplacements;
+	
 	public WordnetReplacer() {
 		try {
 			replacements = new HashMap<String, ArrayList<String>>();
@@ -117,5 +124,74 @@ public class WordnetReplacer implements Replacer {
 		//System.out.println("");
 		
 		return result;
+	}
+
+	@Override
+	public List<TextPart> setSectionReplace(List<TextPart> section) {
+		sectionSize = section.size();
+		wordReplacements = new ArrayList<List<TextPart>>();
+		numReplacements = new ArrayList<Integer>();
+		totalReplacements = 1;
+		for (TextPart part : section) {
+			if (part instanceof Word) {
+				List<TextPart> theseReplacements = new ArrayList<TextPart> ();
+				theseReplacements.addAll(replacements((Word) part));
+				wordReplacements.add(theseReplacements);
+				numReplacements.add(theseReplacements.size());
+				totalReplacements *= theseReplacements.size();
+				
+			} else {
+				List<TextPart> theseReplacements = new ArrayList<TextPart> ();
+				theseReplacements.add(part);
+				wordReplacements.add(theseReplacements);
+				numReplacements.add(theseReplacements.size());
+			}
+		}
+		
+		//System.out.print(numReplacements);
+		//System.out.println(totalReplacements);
+		
+		currentcount = 1;
+		current = new ArrayList<Integer>();
+		for(int i = 0; i<numReplacements.size(); i++) {
+			current.add(0);
+		}
+		
+		List<TextPart> curres = new ArrayList<TextPart>();
+		for (int i=0; i<wordReplacements.size(); i++) {
+			curres.add(wordReplacements.get(i).get(current.get(i)));
+		}
+			
+		return curres;
+	}
+
+	@Override
+	public List<TextPart> getNext() {
+
+		currentcount++;
+		
+		if (currentcount > totalReplacements) return null;
+		
+		List<Integer> last = current;
+		current = new ArrayList<Integer>();
+		for (int i=0; i<sectionSize; i++) {
+			current.add(last.get(i));
+		}
+		
+		for (int i=0; i<sectionSize; i++) {
+			if (current.get(i) == numReplacements.get(i)-1) {
+				current.set(i, 0);
+			} else {
+				current.set(i, current.get(i)+1);
+				break;
+			}
+		}
+		
+		List<TextPart> curres = new ArrayList<TextPart>();
+		for (int i=0; i<wordReplacements.size(); i++) {
+			curres.add(wordReplacements.get(i).get(current.get(i)));
+		}
+			
+		return curres;
 	}
 }
