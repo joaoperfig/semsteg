@@ -49,17 +49,19 @@ public class Embeder {
 			char hideChar = hide.charAt(i);
 			boolean found = false;
 			
-			List<List<TextPart>> sectionReplacements = replacer.sectionReplacements(coverSection);
+			replacer.setSectionReplace(coverSection);
 			
 			System.out.print("Got ");
-			System.out.print(sectionReplacements.size());
+			System.out.print(replacer.getTotalReplacements());
 			System.out.print(" chances to find: ");
 			System.out.println(hideChar);
 			
-			for(int j=0; j<sectionReplacements.size(); j++) {
+			
+			List<TextPart> current = replacer.getNext();
+			while (current != null) {
 				StringBuilder repBuild = new StringBuilder();
-				for (int k=0; k<sectionReplacements.get(j).size(); k++) {
-					repBuild.append(sectionReplacements.get(j).get(k));
+				for (int k=0; k<current.size(); k++) {
+					repBuild.append(current.get(k));
 				}
 				
 				char thisChar = hashFunction.hash(repBuild.toString());
@@ -70,11 +72,12 @@ public class Embeder {
 				
 				if (thisChar == hideChar) {
 					found = true;
-					for (int k=0; k<sectionReplacements.get(j).size(); k++) {
-						result.addPart(sectionReplacements.get(j).get(k));
+					for (int k=0; k<current.size(); k++) {
+						result.addPart(current.get(k));
 					}
 					break;
 				}
+				current = replacer.getNext();
 			}
 			
 			if (!found) {

@@ -139,4 +139,9 @@ public class WordnetReplacer implements Replacer {
 			
 		return curres;
 	}
+
+	@Override
+	public int getTotalReplacements() {
+		return totalReplacements;
+	}
 }

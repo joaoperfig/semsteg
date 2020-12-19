@@ -11,4 +11,6 @@ public interface Replacer {
 	public List<TextPart> setSectionReplace (List<TextPart> section);
 	
 	public List<TextPart> getNext();
+	
+	public int getTotalReplacements();
 }
