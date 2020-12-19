@@ -72,7 +72,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		if (args.length != 5) {
-			System.out.println("Usage: java semsteg.main coverfile plaintextfile alphabetfile sectionSize outfile");
+			System.out.println("Usage: java semsteg.Main coverfile plaintextfile alphabetfile sectionSize outfile");
 			return;
 		}
 		
