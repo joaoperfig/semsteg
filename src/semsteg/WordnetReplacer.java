@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WordnetReplacer implements Replacer {
-	public static String dataFile = "E:\\gits\\semsteg\\wordnet_parser\\parsed.txt";
+	//public static String dataFile = "E:\\gits\\semsteg\\wordnet_parser\\parsed.txt";
+	public static String dataFile = "E:\\gits\\semsteg\\wordnet_parser\\safemode_replacements.txt";
 	
 	private Map<String, ArrayList<String>> replacements;
 	
