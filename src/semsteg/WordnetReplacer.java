@@ -15,7 +15,7 @@ public class WordnetReplacer implements Replacer {
 	private List<Integer> current;
 	private List<List<TextPart>> wordReplacements;
 	private int currentcount;
-	private int totalReplacements;
+	private long totalReplacements;
 	private int sectionSize;
 	List<Integer> numReplacements;
 	
@@ -94,6 +94,9 @@ public class WordnetReplacer implements Replacer {
 			}
 		}
 		
+		//avoid overflow
+		if (totalReplacements < 0) totalReplacements = Long.MAX_VALUE;
+		
 		//System.out.print(numReplacements);
 		//System.out.println(totalReplacements);
 		
@@ -142,7 +145,7 @@ public class WordnetReplacer implements Replacer {
 	}
 
 	@Override
-	public int getTotalReplacements() {
+	public long getTotalReplacements() {
 		return totalReplacements;
 	}
 }

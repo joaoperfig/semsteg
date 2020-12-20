@@ -12,5 +12,5 @@ public interface Replacer {
 	
 	public List<TextPart> getNext();
 	
-	public int getTotalReplacements();
+	public long getTotalReplacements();
 }
