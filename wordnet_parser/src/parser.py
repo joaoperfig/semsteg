@@ -32,12 +32,20 @@ def processline(line):
             sets += [part]
     return word, sets
 
-def processlines(lines):
+def processlines(lines, safemode):
     mysynsets = {}
     for line in lines:
         word, synsets = processline(line)
-        if (word != "") and not (("_" in word) or ("/" in word)):
-            mysynsets[word] = synsets
+        if safemode:
+            safe = True
+            for char in word:
+                if not (char in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"):
+                    safe = False
+            if safe and (word != ""):
+                mysynsets[word] = synsets
+        else:
+            if (word != "") and not (("_" in word) or ("/" in word)):
+                mysynsets[word] = synsets
     return mysynsets
 
 def pluralize(noun):
@@ -55,14 +63,14 @@ def conjugate(verb):
             res[form[1]+"_"+form[2]] = form[3]
     return res    
 
-def main():
+def main(safemode):
     datafiles = [f for f in listdir(datasrc) if isfile(join(datasrc, f))]
     filedatas = {}
     for file in datafiles:
         print("Reading "+file)
         lines = openfile(join(datasrc, file))
         print("Parsing "+file)
-        filedatas[file] = processlines(lines)
+        filedatas[file] = processlines(lines, safemode)
         
     #to join all, names of sets need to be changed to account for repeated synset names accross files
     for file in datafiles:
@@ -70,6 +78,13 @@ def main():
         print(root)
         for word in filedatas[file]:
             filedatas[file][word] = appendall(filedatas[file][word], root)
+            
+    if safemode:
+        datafiles += ["debug"]
+        filedatas["debug"] = {}
+        safewords = ["not", "who", "but", "me", "what"]
+        for safeword in safewords:
+            filedatas["debug"][safeword] = ["set"+safeword] 
           
     print("Joining equal sets")  
     #equal words get their sets joined
@@ -170,7 +185,10 @@ def main():
     return replacements
 
 if __name__ == "__main__":
-    res = main()
+    
+    safemode = True
+    
+    res = main(safemode)
     
     print("saving results")
     f = open("parsed.txt", "w", encoding='utf-8')
