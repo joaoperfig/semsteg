@@ -1,3 +1,4 @@
+
 package semsteg;
 
 import java.io.BufferedReader;
@@ -6,11 +7,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
+import java.util.ArrayList;
 
-public class Main {
+public class WordStatistics {
 	
-	static String readFile(String filename) {
+static String readFile(String filename) {
 		
 		String everything = "";
 		BufferedReader br = null;
@@ -69,50 +70,24 @@ public class Main {
 		      e.printStackTrace();
 		    }
 	}
-	
-	public static void showChars(String s) {
-		for (int i = 0; i < s.length(); i++){
-		    char c = s.charAt(i);        
-		    System.out.print(i);
-		    System.out.print("-");
-		    System.out.println(c);
-		}
-	}
 
 	public static void main(String[] args) {
-		if (args.length != 5) {
-			System.out.println("Usage: java semsteg.Main coverfile plaintextfile alphabetfile sectionSize outfile");
+		if (args.length != 2) {
+			System.out.println("Usage: java semsteg.WordStatistics infile outfile");
 			return;
 		}
 		
-		String covertext = readFile(args[0]);	
-		System.out.println("Read covertext of length ");
-		System.out.println(covertext.length());
-		String plainText = readFile(args[1]);
-		plainText = plainText.substring(0, plainText.length()-2);
-		showChars(plainText);
-		System.out.println("Read plaintext of length ");
-		System.out.println(plainText.length());
-		System.out.println(plainText);
-		String alphabet = readFile(args[2]);
-		alphabet = alphabet.substring(0, alphabet.length()-2);
-		showChars(alphabet);
-		System.out.println("Read alphabet of length ");
-		System.out.println(alphabet.length());
-		int sectionSize = Integer.parseInt(args[3]);
-		String outfile = args[4];
+		String intext = readFile(args[0]);	
+		System.out.println("Read input file of length ");
+		System.out.println(intext.length());
+		String outfile = args[1];
 		
 		Parser parser = new Parser();
-		ParsedText parsed = parser.parse(covertext);
-		Replacer replacer = new WordnetReplacer();
-		HashingFunction hf = new HashCodeHasher(alphabet);
-		Embeder embed = new Embeder(replacer, alphabet, sectionSize, hf);
+		ParsedText parsed = parser.parse(intext);
 		
-		ParsedText result = embed.embed(parsed, plainText);
-		
-		writeFile(outfile, result.getText());	
-
-		//System.out.println(result.latexHighlight("istdblue", replacer));
+		writeFile(outfile, Double.toString(intext.length()/(double)parsed.wordNum));	
+		System.out.println("Done!");
 	}
+
 
 }

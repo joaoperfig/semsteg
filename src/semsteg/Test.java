@@ -36,14 +36,25 @@ public class Test {
 				"\r\n" + 
 				"Because of the circumstances, Neferirkare's monument lacked several basic elements of a pyramid complex: a valley temple, a causeway, and a cult pyramid. Instead, these were replaced by a small settlement of mudbrick houses south of the monument from where cult priests could conduct their daily activities, rather than the usual pyramid town near the valley temple. The discovery of the Abusir papyri in the 1890s is owed to this. Normally, the papyrus archives would have been contained in the pyramid town where their destruction would have been assured. The pyramid became part of a greater family cemetery. The monuments to Neferirkare's consort, Khentkaus II; and his sons, Neferefre and Nyuserre Ini, are found in the surrounds. Though their construction began under different rulers, all four of these monuments were completed during the reign of Nyuserre. ";
 		pt = p.parse(text);
-		embed.embed(pt, "0101101001101010110111101011111111");
-		
-		
+		ParsedText result = embed.embed(pt, "0101101001101010110111101011111111");
+		Extractor extr = new Extractor("01", 10, hf);
+		System.out.print("Direct Extract: ");
+		System.out.println(extr.extract(result));
+		System.out.print("Reparse Extract: ");
+		System.out.println(extr.extract(p.parse(result.getText())));
+	
 		ParsedText sentence = p.parse("He had likable speediness.");
 		System.out.println(hf.hash("Computing replacements for 'He had likable speediness.'"));
 		List<List<TextPart>> replacements = rep.sectionReplacements (sentence.parts);
 		for (List<TextPart> replacement : replacements) {
 			System.out.println(replacement);
+		}
+		
+		sentence = p.parse("The Radleys, welcome anywhere in town, kept to themselves, a predilection unforgivable in Maycomb. They did not go to church, Maycomb's principal recreation, but worshiped at home; Mrs. Radley seldom if ever crossed the street(...)");
+		for (TextPart part : sentence.parts) {
+			if (part instanceof Word) {
+				System.out.println(rep.replacements((Word)part));
+			}
 		}
 	}
 
