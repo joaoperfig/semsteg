@@ -5,8 +5,11 @@ This is our implementation of a system of text steganography that can be classif
 
 ## Usage
 
+To use:
+> cd src
+
 To compile:
-> javav semsteg/*.java
+> javac semsteg/*.java
 
 To embed a message:
 > java semsteg.Main covertext.txt hidden_message.txt alphabet.txt section_size output_file.txt
